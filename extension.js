@@ -45,7 +45,7 @@ function activate(context) {
       // 是否预览，默认true，预览的意思是下次再打开文件是否会替换当前文件
       //preview: false,
       // 显示在第二个编辑器
-      viewColumn: vscode.ViewColumn.One
+      viewColumn: vscode.ViewColumn.Active
     };
     vscode.window.showTextDocument(vscode.Uri.file(novelPath), options).then(editor => {
       console.log(editor)

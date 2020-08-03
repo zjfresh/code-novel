@@ -70,11 +70,13 @@ function activate(context) {
     })
   })
   let clickBar = vscode.commands.registerCommand('extension.clickStatusBar', () => {
-    vscode.window.showQuickPick(Object.keys(env['books'])).then((value) => {
-      console.log(value)
-      if (value && env['currentBook'] !== value) {
-        changeBook(value)
-      }
+    initPathAndEnv().then(() => {
+      vscode.window.showQuickPick(Object.keys(env['books'])).then((value) => {
+        console.log(value)
+        if (value && env['currentBook'] !== value) {
+          changeBook(value)
+        }
+      })
     })
   })
   vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -156,7 +158,7 @@ function initPathAndEnv() {
   if (!env['currentBook'] || !books.find(b => b === env['currentBook'])) {
     env['currentBook'] = books[0]
   }
-
+  return Promise.resolve()
 }
 
 // 初始化小说内容
@@ -266,7 +268,9 @@ function scrollToTop() {
   let editor = vscode.window.activeTextEditor;
   if (editor) {
     let range = editor.document.lineAt(0).range;
+    console.log('scrollToTop -> editor', ...editor.visibleRanges);
     editor.selection = new vscode.Selection(range.start, range.end);
+    console.log('scrollToTop -> editor.selection', editor.selection);
     editor.revealRange(range);
   }
 }
